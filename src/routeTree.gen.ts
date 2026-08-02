@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiRegisterRouteImport } from './routes/api/register'
 import { Route as ApiPublicRegisterRouteImport } from './routes/api/public/register'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRegisterRoute = ApiRegisterRouteImport.update({
+  id: '/api/register',
+  path: '/api/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicRegisterRoute = ApiPublicRegisterRouteImport.update({
@@ -25,27 +31,31 @@ const ApiPublicRegisterRoute = ApiPublicRegisterRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/register': typeof ApiRegisterRoute
   '/api/public/register': typeof ApiPublicRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/register': typeof ApiRegisterRoute
   '/api/public/register': typeof ApiPublicRegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/register': typeof ApiRegisterRoute
   '/api/public/register': typeof ApiPublicRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/public/register'
+  fullPaths: '/' | '/api/register' | '/api/public/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/register'
-  id: '__root__' | '/' | '/api/public/register'
+  to: '/' | '/api/register' | '/api/public/register'
+  id: '__root__' | '/' | '/api/register' | '/api/public/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiRegisterRoute: typeof ApiRegisterRoute
   ApiPublicRegisterRoute: typeof ApiPublicRegisterRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/register': {
+      id: '/api/register'
+      path: '/api/register'
+      fullPath: '/api/register'
+      preLoaderRoute: typeof ApiRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/register': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiRegisterRoute: ApiRegisterRoute,
   ApiPublicRegisterRoute: ApiPublicRegisterRoute,
 }
 export const routeTree = rootRouteImport
