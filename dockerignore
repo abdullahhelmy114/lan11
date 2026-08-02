@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+.output
+.vinxi
+
+# Editor / OS
+.DS_Store
+*.log
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# Lovable / deployment metadata
+.lovable
+.workspace
+
+# Testing / local env
+.env
+.env.local
+.env.*.local
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore

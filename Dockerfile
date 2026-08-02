@@ -1,0 +1,52 @@
+# syntax=docker/dockerfile:1
+
+# ----------------------------------------
+# Stage 1: Install dependencies
+# ----------------------------------------
+FROM oven/bun:1-alpine AS deps
+
+WORKDIR /app
+
+# Copy package manifests and lockfile first for better layer caching
+COPY package.json bun.lock bunfig.toml ./
+
+# Install all dependencies (dev + prod) because Vite/Tailwind/Nitro are devDependencies
+RUN bun install --frozen-lockfile
+
+# ----------------------------------------
+# Stage 2: Build the application
+# ----------------------------------------
+FROM oven/bun:1-alpine AS builder
+
+WORKDIR /app
+
+# Copy installed node_modules from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy source files and configs (vite.config.coolify.ts switches Nitro to node-server)
+COPY package.json bun.lock bunfig.toml tsconfig.json vite.config.ts vite.config.coolify.ts eslint.config.js components.json ./
+COPY src ./src
+COPY public ./public
+
+# Build the production bundle for self-hosting (outputs to dist/)
+RUN bunx vite build --config vite.config.coolify.ts
+
+# ----------------------------------------
+# Stage 3: Production runtime
+# ----------------------------------------
+FROM oven/bun:1-alpine AS runner
+
+WORKDIR /app
+
+# Copy only the built output and package metadata needed to run
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package.json ./package.json
+
+# Default port; Coolify can override via environment variable PORT
+ENV NODE_ENV=production
+ENV PORT=3000
+
+EXPOSE 3000
+
+# Start the Nitro server produced by TanStack Start
+CMD ["bun", "run", "start"]
