@@ -17,9 +17,6 @@ dist
 .git
 .gitignore
 
-# Lovable / deployment metadata
-.lovable
-.workspace
 
 # Testing / local env
 .env
