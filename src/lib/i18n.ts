@@ -1,9 +1,9 @@
 export type Lang = "ar" | "en" | "tr";
 
 export const LANGS: { code: Lang; label: string; native: string; note: string }[] = [
-  { code: "ar", label: "AR", native: "العربية", note: "لغة الوحي والقرار" },
-  { code: "en", label: "EN", native: "English", note: "Language of advocacy" },
-  { code: "tr", label: "TR", native: "Türkçe", note: "Kardeşliğin dili" },
+  { code: "ar", label: "AR", native: "العربية", note: "" },
+  { code: "en", label: "EN", native: "English", note: "" },
+  { code: "tr", label: "TR", native: "Türkçe", note: "" },
 ];
 
 export const dirOf = (l: Lang) => (l === "ar" ? "rtl" : "ltr");
@@ -62,7 +62,7 @@ export const t: Record<Lang, Dict> = {
       eyebrow: "هدية تضامنية مجانية · د. جيهان زياد",
       title: "جسرٌ من الكلمة الطيّبة واليقين.. يرافق خطاكم نحو العدالة",
       sub: "برنامج «روح القدس رفيق السفر» اللغوي والروحي — هدية تضامنية مجانية لأعضاء قافلة الأرض العالمية لفلسطين.",
-      pick: "اختر لغة رفقتك في الطريق",
+      pick: "اختر لغلغتك الأم",
       cta: "سجّل واستلم الهدية",
     },
     welcome: {
@@ -92,7 +92,7 @@ export const t: Record<Lang, Dict> = {
       label: "التسجيل",
       title: "سجّل لاستلام الهدية وتنبيهات الدورات",
       steps: ["اللغة", "بياناتك", "تم"],
-      lang: "لغة البرنامج",
+      lang: "اللغة الأم",
       name: "الاسم الكامل",
       email: "البريد الإلكتروني",
       whatsapp: "رقم الواتساب",
