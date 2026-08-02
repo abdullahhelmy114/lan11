@@ -3,7 +3,7 @@
 # ----------------------------------------
 # Stage 1: Install dependencies
 # ----------------------------------------
-FROM oven/bun:1-alpine AS deps
+FROM oven/bun:1.3.3-alpine AS deps
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN bun install --frozen-lockfile
 # ----------------------------------------
 # Stage 2: Build the application
 # ----------------------------------------
-FROM oven/bun:1-alpine AS builder
+FROM oven/bun:1.3.3-alpine AS builder
 
 WORKDIR /app
 
@@ -34,7 +34,7 @@ RUN bunx vite build --config vite.config.coolify.ts
 # ----------------------------------------
 # Stage 3: Production runtime
 # ----------------------------------------
-FROM oven/bun:1-alpine AS runner
+FROM oven/bun:1.3.3-alpine AS runner
 
 WORKDIR /app
 
