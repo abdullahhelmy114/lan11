@@ -41,7 +41,7 @@ export function RoadmapTimeline({ lang }: { lang: Lang }) {
   };
 
   const shareUrl = `https://wa.me/?text=${encodeURIComponent(
-    `روح القدس رفيق السفر — هدية مجانية لقافلة فلسطين البرية. https://ruhulqudus.org`,
+    `روح القدس رفيق السفر — هدية مجانية لقافلة فلسطين البرية. https://ruhulqudus.com`,
   )}`;
 
   const units = cd

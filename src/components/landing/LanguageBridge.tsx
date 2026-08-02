@@ -7,8 +7,8 @@ import { SectionLabel } from "./shared";
 const SHARE = [
   { label: "WhatsApp", url: (t: string) => `https://wa.me/?text=${encodeURIComponent(t)}` },
   { label: "X", url: (t: string) => `https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}` },
-  { label: "Telegram", url: (t: string) => `https://t.me/share/url?url=${encodeURIComponent("https://ruhulqudus.org")}&text=${encodeURIComponent(t)}` },
-  { label: "Facebook", url: () => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("https://ruhulqudus.org")}` },
+  { label: "Telegram", url: (t: string) => `https://t.me/share/url?url=${encodeURIComponent("https://ruhulqudus.com")}&text=${encodeURIComponent(t)}` },
+  { label: "Facebook", url: () => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("https://ruhulqudus.com")}` },
 ];
 
 export function LanguageBridge({ lang }: { lang: Lang }) {

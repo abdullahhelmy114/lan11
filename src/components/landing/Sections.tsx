@@ -193,7 +193,7 @@ export function Footer({ lang }: { lang: Lang }) {
               {[
                 { label: "WhatsApp", href: "https://wa.me/" },
                 { label: "Instagram", href: "https://instagram.com/" },
-                { label: "Email", href: "mailto:hello@ruhulqudus.org" },
+                { label: "Email", href: "mailto:hello@ruhulqudus.com" },
               ].map((s) => (
                 <a
                   key={s.label}
