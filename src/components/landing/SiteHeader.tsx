@@ -38,7 +38,7 @@ export function SiteHeader({
           <Seal />
           <div className="min-w-0 leading-tight">
             <p className="truncate font-serif text-sm font-semibold text-primary sm:text-base rtl:font-arabic">
-              {lang === "ar" ? "حقيبة الوعي والمناصرة" : "Awareness & Advocacy Kit"}
+              {lang === "ar" ? "أكادمية روح القدس" : "ٌRuhulqudus Academy"}
             </p>
             <p className="truncate text-[10px] text-muted-foreground sm:text-[11px]">
               {lang === "ar" ? "قافلة فلسطين العالمية البرية" : "Global Palestine Land Caravan"}
