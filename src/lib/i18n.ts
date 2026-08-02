@@ -35,6 +35,7 @@ type Dict = {
     errName: string;
     errEmail: string;
     errPhone: string;
+    errSubmit: string;
   };
   wall: {
     label: string;
@@ -46,6 +47,7 @@ type Dict = {
     submit: string;
     posted: string;
     empty: string;
+    errSubmit: string;
   };
   roadmap: { label: string; title: string; items: { title: string; body: string; tag: string }[] };
   footer: { about: string; rights: string; links: string; contact: string };
@@ -106,6 +108,7 @@ export const t: Record<Lang, Dict> = {
       errName: "الرجاء كتابة الاسم",
       errEmail: "بريد إلكتروني غير صحيح",
       errPhone: "رقم واتساب غير صحيح",
+      errSubmit: "تعذّر إرسال التسجيل، حاول مرة أخرى",
     },
     wall: {
       label: "جدار التضامن",
@@ -117,6 +120,7 @@ export const t: Record<Lang, Dict> = {
       submit: "أضف رسالتك",
       posted: "أضيفت رسالتك إلى الجدار",
       empty: "كن أول من يكتب على الجدار.",
+      errSubmit: "تعذّر إرسال الرسالة، حاول مرة أخرى",
     },
     roadmap: {
       label: "الطريق أمامنا",
@@ -188,6 +192,7 @@ export const t: Record<Lang, Dict> = {
       errName: "Please enter your name",
       errEmail: "Enter a valid email",
       errPhone: "Enter a valid WhatsApp number",
+      errSubmit: "Could not submit. Please try again.",
     },
     wall: {
       label: "Solidarity wall",
@@ -199,6 +204,7 @@ export const t: Record<Lang, Dict> = {
       submit: "Add your message",
       posted: "Your message was added to the wall",
       empty: "Be the first to write on the wall.",
+      errSubmit: "Could not send your message. Please try again.",
     },
     roadmap: {
       label: "The road ahead",
@@ -270,6 +276,7 @@ export const t: Record<Lang, Dict> = {
       errName: "Lütfen adınızı yazın",
       errEmail: "Geçerli bir e-posta girin",
       errPhone: "Geçerli bir WhatsApp numarası girin",
+      errSubmit: "Kayıt gönderilemedi, lütfen tekrar deneyin",
     },
     wall: {
       label: "Dayanışma duvarı",
@@ -281,6 +288,7 @@ export const t: Record<Lang, Dict> = {
       submit: "Mesajını ekle",
       posted: "Mesajınız duvara eklendi",
       empty: "Duvara ilk yazan siz olun.",
+      errSubmit: "Mesaj gönderilemedi, lütfen tekrar deneyin",
     },
     roadmap: {
       label: "Önümüzdeki yol",

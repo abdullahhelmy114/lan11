@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { t, type Lang } from "@/lib/i18n";
-import { addMessage, getMessages, SEED_MESSAGES, type SolidarityMessage } from "@/lib/local-store";
+import type { SolidarityMessage } from "@/lib/local-store";
 import { ui } from "@/lib/content";
 import { SectionLabel } from "./shared";
+
 
 export function SolidarityWall({ lang }: { lang: Lang }) {
   const tr = t[lang];
@@ -34,15 +35,37 @@ export function SolidarityWall({ lang }: { lang: Lang }) {
       setPending(null);
     }
   };
-  const [rows, setRows] = useState<SolidarityMessage[]>(SEED_MESSAGES);
+  const [rows, setRows] = useState<SolidarityMessage[]>([]);
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [posted, setPosted] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const load = async () => {
+    try {
+      const res = await fetch("/api/public/messages", { cache: "no-store" });
+      const data = (await res.json()) as {
+        messages?: { id: number; name: string; country: string; message: string; created_at: string }[];
+      };
+      setRows(
+        (data.messages ?? []).map((m) => ({
+          id: String(m.id),
+          name: m.name,
+          country: m.country,
+          message: m.message,
+          createdAt: m.created_at,
+          approved: true,
+        })),
+      );
+    } catch {
+      /* offline */
+    }
+  };
 
   useEffect(() => {
-    setRows([...getMessages(), ...SEED_MESSAGES]);
+    void load();
   }, []);
 
   const schema = z.object({
@@ -51,7 +74,7 @@ export function SolidarityWall({ lang }: { lang: Lang }) {
     message: z.string().trim().min(4).max(400),
   });
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsed = schema.safeParse({ name, country, message });
     if (!parsed.success) {
@@ -61,14 +84,27 @@ export function SolidarityWall({ lang }: { lang: Lang }) {
       return;
     }
     setErrors({});
-    const row = addMessage(parsed.data);
-    setRows((prev) => [row, ...prev]);
-    setName("");
-    setCountry("");
-    setMessage("");
-    setPosted(true);
-    setTimeout(() => setPosted(false), 3000);
+    setSending(true);
+    try {
+      const res = await fetch("/api/public/messages", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      if (!res.ok) throw new Error("failed");
+      setName("");
+      setCountry("");
+      setMessage("");
+      setPosted(true);
+      setTimeout(() => setPosted(false), 3000);
+      await load();
+    } catch {
+      setErrors({ message: tr.wall.errSubmit });
+    } finally {
+      setSending(false);
+    }
   };
+
 
   const inputClass =
     "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-orange";
@@ -106,10 +142,12 @@ export function SolidarityWall({ lang }: { lang: Lang }) {
         </div>
         <button
           type="submit"
-          className="rounded-full bg-orange px-6 py-3.5 text-sm font-medium text-accent-foreground shadow-gold transition-transform hover:scale-[1.02]"
+          disabled={sending}
+          className="rounded-full bg-orange px-6 py-3.5 text-sm font-medium text-accent-foreground shadow-gold transition-transform hover:scale-[1.02] disabled:opacity-60"
         >
-          {tr.wall.submit}
+          {sending ? "…" : tr.wall.submit}
         </button>
+
         {Object.keys(errors).length > 0 && (
           <p className="text-xs text-destructive md:col-span-4">
             {errors["name"] ?? errors["country"] ?? errors["message"]}
@@ -121,7 +159,7 @@ export function SolidarityWall({ lang }: { lang: Lang }) {
       {rows.length === 0 ? (
         <p className="mt-10 text-sm text-muted-foreground">{tr.wall.empty}</p>
       ) : (
-        <div className="mt-10 columns-1 gap-5 sm:columns-2 lg:columns-3 [&>*]:mb-5">
+        <div className="mt-10 columns-1 gap-5 sm:columns-2 lg:columns-3 *:mb-5">
           {rows.map((row) => (
             <figure
               key={row.id}

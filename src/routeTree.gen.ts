@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiRegisterRouteImport } from './routes/api/register'
+import { Route as ApiPublicMessagesRouteImport } from './routes/api/public/messages'
 import { Route as ApiPublicRegisterRouteImport } from './routes/api/public/register'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const ApiRegisterRoute = ApiRegisterRouteImport.update({
   path: '/api/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMessagesRoute = ApiPublicMessagesRouteImport.update({
+  id: '/api/public/messages',
+  path: '/api/public/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicRegisterRoute = ApiPublicRegisterRouteImport.update({
   id: '/api/public/register',
   path: '/api/public/register',
@@ -32,30 +38,40 @@ const ApiPublicRegisterRoute = ApiPublicRegisterRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/register': typeof ApiRegisterRoute
+  '/api/public/messages': typeof ApiPublicMessagesRoute
   '/api/public/register': typeof ApiPublicRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/register': typeof ApiRegisterRoute
+  '/api/public/messages': typeof ApiPublicMessagesRoute
   '/api/public/register': typeof ApiPublicRegisterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/register': typeof ApiRegisterRoute
+  '/api/public/messages': typeof ApiPublicMessagesRoute
   '/api/public/register': typeof ApiPublicRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/register' | '/api/public/register'
+  fullPaths:
+    '/' | '/api/register' | '/api/public/messages' | '/api/public/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/register' | '/api/public/register'
-  id: '__root__' | '/' | '/api/register' | '/api/public/register'
+  to: '/' | '/api/register' | '/api/public/messages' | '/api/public/register'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/register'
+    | '/api/public/messages'
+    | '/api/public/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiRegisterRoute: typeof ApiRegisterRoute
+  ApiPublicMessagesRoute: typeof ApiPublicMessagesRoute
   ApiPublicRegisterRoute: typeof ApiPublicRegisterRoute
 }
 
@@ -75,6 +91,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/messages': {
+      id: '/api/public/messages'
+      path: '/api/public/messages'
+      fullPath: '/api/public/messages'
+      preLoaderRoute: typeof ApiPublicMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/register': {
       id: '/api/public/register'
       path: '/api/public/register'
@@ -88,8 +111,19 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiRegisterRoute: ApiRegisterRoute,
+  ApiPublicMessagesRoute: ApiPublicMessagesRoute,
   ApiPublicRegisterRoute: ApiPublicRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
