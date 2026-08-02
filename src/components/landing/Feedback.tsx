@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { Lang } from "@/lib/i18n";
 import { ui } from "@/lib/content";
-import { addFeedback } from "@/lib/local-store";
 import { SectionLabel } from "./shared";
 
 export function Feedback({ lang }: { lang: Lang }) {
@@ -10,15 +9,34 @@ export function Feedback({ lang }: { lang: Lang }) {
   const [name, setName] = useState("");
   const [body, setBody] = useState("");
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (body.trim().length < 3) return;
-    addFeedback({ kind, name: name.trim(), body: body.trim() });
-    setBody("");
-    setName("");
-    setSent(true);
-    window.setTimeout(() => setSent(false), 3000);
+    setLoading(true);
+    setError(false);
+    try {
+      const res = await fetch("/api/public/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: kind,
+          name: name.trim(),
+          message: body.trim(),
+        }),
+      });
+      if (!res.ok) throw new Error("submit failed");
+      setBody("");
+      setName("");
+      setSent(true);
+      window.setTimeout(() => setSent(false), 4000);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputClass =
@@ -72,11 +90,13 @@ export function Feedback({ lang }: { lang: Lang }) {
         </div>
         <button
           type="submit"
-          className="mt-5 rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground shadow-elegant transition-transform hover:scale-[1.02]"
+          disabled={loading}
+          className="mt-5 rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground shadow-elegant transition-transform hover:scale-[1.02] disabled:opacity-60"
         >
-          {u.feedbackSubmit}
+          {loading ? "…" : u.feedbackSubmit}
         </button>
         {sent && <p className="mt-3 text-xs text-orange">{u.feedbackThanks}</p>}
+        {error && <p className="mt-3 text-xs text-crimson">{u.feedbackError}</p>}
       </form>
     </section>
   );

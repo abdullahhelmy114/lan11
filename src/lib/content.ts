@@ -255,6 +255,7 @@ type UiDict = {
   feedbackText: string;
   feedbackSubmit: string;
   feedbackThanks: string;
+  feedbackError: string;
 };
 
 export const ui: Record<Lang, UiDict> = {
@@ -335,6 +336,7 @@ export const ui: Record<Lang, UiDict> = {
     feedbackText: "اكتب هنا…",
     feedbackSubmit: "إرسال",
     feedbackThanks: "وصلتنا رسالتك، شكرًا لك.",
+    feedbackError: "تعذّر إرسال الرسالة، حاول مرة أخرى.",
   },
   en: {
     heroCta: "Register now for the gift & alerts",
@@ -413,6 +415,7 @@ export const ui: Record<Lang, UiDict> = {
     feedbackText: "Write here…",
     feedbackSubmit: "Send",
     feedbackThanks: "We received your message, thank you.",
+    feedbackError: "Could not send your message. Please try again.",
   },
   tr: {
     heroCta: "Şimdi kaydolun: hediye ve bildirimler",
@@ -491,6 +494,7 @@ export const ui: Record<Lang, UiDict> = {
     feedbackText: "Buraya yazın…",
     feedbackSubmit: "Gönder",
     feedbackThanks: "Mesajınız bize ulaştı, teşekkürler.",
+    feedbackError: "Mesaj gönderilemedi, lütfen tekrar deneyin.",
   },
 };
 

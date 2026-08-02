@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiRegisterRouteImport } from './routes/api/register'
+import { Route as ApiPublicFeedbackRouteImport } from './routes/api/public/feedback'
 import { Route as ApiPublicMessagesRouteImport } from './routes/api/public/messages'
 import { Route as ApiPublicRegisterRouteImport } from './routes/api/public/register'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApiRegisterRoute = ApiRegisterRouteImport.update({
   id: '/api/register',
   path: '/api/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicFeedbackRoute = ApiPublicFeedbackRouteImport.update({
+  id: '/api/public/feedback',
+  path: '/api/public/feedback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicMessagesRoute = ApiPublicMessagesRouteImport.update({
@@ -38,12 +44,14 @@ const ApiPublicRegisterRoute = ApiPublicRegisterRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/register': typeof ApiRegisterRoute
+  '/api/public/feedback': typeof ApiPublicFeedbackRoute
   '/api/public/messages': typeof ApiPublicMessagesRoute
   '/api/public/register': typeof ApiPublicRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/register': typeof ApiRegisterRoute
+  '/api/public/feedback': typeof ApiPublicFeedbackRoute
   '/api/public/messages': typeof ApiPublicMessagesRoute
   '/api/public/register': typeof ApiPublicRegisterRoute
 }
@@ -51,19 +59,30 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/register': typeof ApiRegisterRoute
+  '/api/public/feedback': typeof ApiPublicFeedbackRoute
   '/api/public/messages': typeof ApiPublicMessagesRoute
   '/api/public/register': typeof ApiPublicRegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/api/register' | '/api/public/messages' | '/api/public/register'
+    | '/'
+    | '/api/register'
+    | '/api/public/feedback'
+    | '/api/public/messages'
+    | '/api/public/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/register' | '/api/public/messages' | '/api/public/register'
+  to:
+    | '/'
+    | '/api/register'
+    | '/api/public/feedback'
+    | '/api/public/messages'
+    | '/api/public/register'
   id:
     | '__root__'
     | '/'
     | '/api/register'
+    | '/api/public/feedback'
     | '/api/public/messages'
     | '/api/public/register'
   fileRoutesById: FileRoutesById
@@ -71,6 +90,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiRegisterRoute: typeof ApiRegisterRoute
+  ApiPublicFeedbackRoute: typeof ApiPublicFeedbackRoute
   ApiPublicMessagesRoute: typeof ApiPublicMessagesRoute
   ApiPublicRegisterRoute: typeof ApiPublicRegisterRoute
 }
@@ -89,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/api/register'
       fullPath: '/api/register'
       preLoaderRoute: typeof ApiRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/feedback': {
+      id: '/api/public/feedback'
+      path: '/api/public/feedback'
+      fullPath: '/api/public/feedback'
+      preLoaderRoute: typeof ApiPublicFeedbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/messages': {
@@ -111,19 +138,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiRegisterRoute: ApiRegisterRoute,
+  ApiPublicFeedbackRoute: ApiPublicFeedbackRoute,
   ApiPublicMessagesRoute: ApiPublicMessagesRoute,
   ApiPublicRegisterRoute: ApiPublicRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
