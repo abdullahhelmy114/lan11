@@ -17,7 +17,7 @@ function go(id: string) {
 export function Seal() {
   return (
     <span className="grid aspect-square h-10 w-10 shrink-0 place-items-center rounded-2xl gradient-emerald ring-2 ring-gold/70 sm:h-11 sm:w-11">
-      <span className="font-arabic text-lg leading-none text-on-hero sm:text-xl">ر</span>
+      <span className="font-arabic text-lg leading-none text-on-hero sm:text-xl">ق</span>
     </span>
   );
 }
