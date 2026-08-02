@@ -41,7 +41,7 @@ export function Hero({
         <div className="mx-auto mt-16 max-w-3xl text-center sm:mt-24">
           <span className="glass inline-block rounded-full px-4 py-1.5 text-[11px] font-medium tracking-[0.2em] text-primary">
             {lang === "ar"
-              ? "إعداد وإشراف: الدكتورة جيهان علي زياد • إهداء مجاني لقافلة فلسطين البرية"
+              ? " • إهداء مجاني من روح القدس لقافلة فلسطين البرية"
               : tr.hero.eyebrow}
           </span>
           <h1 className="mt-7 text-balance text-3xl font-semibold leading-[1.15] text-gradient-ink sm:text-6xl">

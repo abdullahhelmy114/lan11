@@ -41,7 +41,7 @@ export function SiteHeader({
               {lang === "ar" ? "أكادمية روح القدس" : "ٌRuhulqudus Academy"}
             </p>
             <p className="truncate text-[10px] text-muted-foreground sm:text-[11px]">
-              {lang === "ar" ? "قافلة فلسطين العالمية البرية" : "Global Palestine Land Caravan"}
+              {lang === "ar" ? "" : ""}
             </p>
           </div>
         </div>
